@@ -13,5 +13,8 @@ jobs:
     steps:
     - name: Delete
       run: |
+        echo "issue number: ${{ context.issue.number }}"
+        echo "owner: ${{ context.repo.owner }}"
+        echo "repo: ${{ context.repo.repo }}"
         echo "Nothing to do here"
         #curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept:application/vnd.github.v3+json" $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/labels/run-ci
