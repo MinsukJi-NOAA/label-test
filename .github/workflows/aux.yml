@@ -4,6 +4,8 @@ on:
     workflows: ["Pull Request Tests"]
     types:
     - completed
+env:
+  app: Accept:application/vnd.github.v3+json
 
 jobs:
   job1:
@@ -13,8 +15,10 @@ jobs:
     steps:
     - name: Delete
       run: |
-        echo "issue number: ${{ context.issue.number }}"
-        echo "owner: ${{ context.repo.owner }}"
-        echo "repo: ${{ context.repo.repo }}"
-        echo "Nothing to do here"
-        #curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept:application/vnd.github.v3+json" $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/labels/run-ci
+        head_sha=${{ github.event.workflow_run.head_sha }}
+        echo "head_sha is $head_sha"
+        url=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY
+        echo "url is $url"
+        pr_number=$(curl -sS -H $app $url/pulls | jq -r '.[] | select(.head.sha == "'"$head_sha"'") | .number')
+        echo "pr_number is $pr_number"
+        curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H $app $url/issues/$pr_number/labels/run-ci
