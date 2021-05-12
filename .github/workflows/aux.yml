@@ -1,0 +1,16 @@
+name: Helpers
+on:
+  workflow_run:
+    workflows: ["Pull Request Tests"]
+    types:
+    - completed
+
+jobs:
+  job1:
+    name: Delete label
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Delete
+      run: |
+        curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept:application/vnd.github.v3+json" $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/labels/run-ci
