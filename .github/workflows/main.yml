@@ -1,0 +1,32 @@
+name: Pull Request Tests
+on:
+  push:
+    branches: ['master']
+  pull_request:
+    branches: ['master']
+    types: ['labeled']
+
+jobs:
+  repocheck:
+    name: Check if repos are up to date
+    runs-on: ubuntu-20.04
+
+    outputs:
+      current: ${{ steps.check.outputs.current }}
+
+    steps:
+    - name: Set repocheck currency flag
+      id: check
+      run: echo "set-output name=current::yes"
+
+  setup:
+    name: Configure cases to run
+    needs: [repocheck]
+    runs-on: ubuntu-20.04
+    if: needs.repocheck.outputs.current == 'yes' && github.event.label.name == 'run-ci'
+
+    steps:
+    - name: Execute
+      run: |
+        echo "from repocheck: ${{ needs.repocheck.outputs.current }}"
+        echo "label is: ${{ github.event.label.name }}"
