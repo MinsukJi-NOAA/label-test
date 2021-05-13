@@ -13,6 +13,11 @@ jobs:
       current: ${{ steps.check.outputs.current }}
 
     steps:
+    - name: Print out github context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
     - name: Set repocheck currency flag
       id: check
       run: echo "set-output name=current::yes"

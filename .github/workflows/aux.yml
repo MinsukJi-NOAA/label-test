@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    - name: Print out github context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
     - name: Delete
       run: |
         head_sha=${{ github.event.workflow_run.head_sha }}
