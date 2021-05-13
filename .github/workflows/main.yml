@@ -20,7 +20,7 @@ jobs:
 
     - name: Set repocheck currency flag
       id: check
-      run: echo "set-output name=current::yes"
+      run: echo "::set-output name=current::yes"
 
   setup:
     name: Configure cases to run
