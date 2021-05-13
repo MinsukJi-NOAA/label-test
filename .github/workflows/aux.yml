@@ -13,12 +13,17 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Delete
-      run: |
-        head_sha=${{ github.event.workflow_run.head_sha }}
-        echo "head_sha is $head_sha"
-        url=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY
-        echo "url is $url"
-        pr_number=$(curl -sS -H $app $url/pulls | jq -r '.[] | select(.head.sha == "'"$head_sha"'") | .number')
-        echo "pr_number is $pr_number"
-        curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H $app $url/issues/$pr_number/labels/run-ci
+    - name: Print out github context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
+#    - name: Delete
+#      run: |
+#        head_sha=${{ github.event.workflow_run.head_sha }}
+#        echo "head_sha is $head_sha"
+#        url=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY
+#        echo "url is $url"
+#        pr_number=$(curl -sS -H $app $url/pulls | jq -r '.[] | select(.head.sha == "'"$head_sha"'") | .number')
+#        echo "pr_number is $pr_number"
+#        curl -sS -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H $app $url/issues/$pr_number/labels/run-ci
